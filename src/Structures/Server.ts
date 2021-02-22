@@ -123,14 +123,51 @@ class Server {
         if (!this.id || typeof this.id !== "string") throw new Error("Unknown server");
 
         try {
-            await this.client.api.servers(this.id).get();
+            await this.client.api.client.servers(this.id).get();
         } catch {
             throw new Error("Unknown server");
         }
 
-        await this.client.api.servers(this.id).power.post({
+        await this.client.api.client.servers(this.id).power.post({
             data: {
                 signal: action
+            }
+        });
+    }
+
+    /**
+     * Sets server name
+     * @param name new server name to set
+     */
+    async setName(name: string): Promise<void> {
+        if (!name || typeof name !== "string") throw new TypeError("Missing name to set");
+        await this.client.api.client.servers(this.id).settings.rename.post({
+            data: {
+                name: name
+            }
+        });
+    }
+
+    /**
+     * Re-installs this server
+     */
+    async reinstall() {
+        return await this.client.api.client.servers(this.id).settings.reinstall.post();
+    }
+
+    /**
+     * Deletes this server
+     * @param force If it should forcefully delete this server
+     */
+    async delete(force?: boolean) {
+        return force ? await this.client.api.application.servers(this.id).delete() : await this.client.api.application.servers(this.id).force.delete();
+    }
+
+    async send(command: string): Promise<void> {
+        if (!command || typeof command !== "string") throw new TypeError("Missing command to send");
+        await this.client.api.client.servers(this.id).command.post({
+            data: {
+                command: command
             }
         });
     }

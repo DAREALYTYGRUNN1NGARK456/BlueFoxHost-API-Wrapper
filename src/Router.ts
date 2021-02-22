@@ -22,7 +22,10 @@ const getPath = (a: any, s: any) => {
 };
 
 function handleResponse(res: Response) {
-    if (res.status >= 200 && res.status < 400) return (res.json().catch(() => {}) || { status: res.status, message: res.statusText });
+    if (res.status >= 200 && res.status < 400) {
+        const response = res.json().catch(() => { });
+        return response;
+    }
     throw new Error(`[${res.statusText}] Rejected with status code "${res.status}"!`);
 }
 

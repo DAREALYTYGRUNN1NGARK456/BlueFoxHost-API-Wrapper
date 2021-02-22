@@ -31,7 +31,7 @@ class BlueFox {
      */
     async getServer(id: string): Promise<Server> {
         if (!id || typeof id !== "string") throw new TypeError("Invalid id");
-        const data = await this.api.servers(id).get();
+        const data = await this.api.client.servers(id).get();
         return new Server(this, data);
     }
 
@@ -43,7 +43,7 @@ class BlueFox {
         if (!id || typeof id !== "string") throw new TypeError("Invalid id");
         
         try {
-            let x = await this.api.servers(id).get();
+            let x = await this.api.client.servers(id).get();
             return !!(x && x.attributes && x.attributes.identifier);
         } catch {
             return false;
@@ -54,7 +54,7 @@ class BlueFox {
      * Returns array of all servers
      */
     async listServers(): Promise<Server[]> {
-        const data = await this.api.get();
+        const data = await this.api.client.get();
         if (!data || !data.data || !data.data.length || !data.data.map((m: any) => m.object === "server").length) return [];
 
         return data.data.map((m: any) => new Server(this, m));
@@ -64,7 +64,7 @@ class BlueFox {
      * Returns user info
      */
     async me(): Promise<User> {
-        const data = await this.api.account.get();
+        const data = await this.api.client.account.get();
         return {
             id: data?.attributes?.id,
             admin: data?.attributes?.admin,

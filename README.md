@@ -13,3 +13,14 @@ const server = await client.getServer("server_id");
 console.log(`Shutting down ${server.name}...`);
 await server.stop();
 ```
+
+## Rename the server
+
+```js
+import { Client } from "https://deno.land/x/bluefox/mod.ts";
+
+const client = new Client("YOUR_AUTH_TOKEN");
+
+const server = await client.getServer("server_id");
+await server.setName("My Server");
+```
